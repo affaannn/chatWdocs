@@ -31,7 +31,10 @@ def careersage():
 
 
     def get_text_chunks(text):
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200,
+                                                       separators=["\n\n", "\n", ".", " "],
+                                                       keep_separator=False,)
+        
         chunks = text_splitter.split_text(text)
         return chunks
 
@@ -82,21 +85,16 @@ def careersage():
 
 
     #def main():
-    with st.sidebar:
+    #with st.sidebar:
         
-        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
-        if st.button("Submit & Process"):
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                text_chunks = get_text_chunks(raw_text)
-                get_vector_store(text_chunks)
-                st.success("Done")
+        
 
 
     prompt_template = """
             You are a resume expert hired to assist with resume for various job applications like data science, data engineer, big data, frontend and backend developer, devops, accontants, HR, bank managers and many more.
             You have access to a database of resume and can retrieve relevant information to provide accurate and detailed responses by highlighting the candidate's skills, experiences , achievements and even some personal details or hobbies and you may also need to do some calcluation if required.
             Instructions: You will be asked questions by Hiring managers, recruiters, career coaches, students or recent graduates, professionals seeking career change, job seekers etc . Using the provided context and your resume knowledge, your task is to think step by step and generate a detailed and accurate response to the user's query. Ensure that the information is up-to-date relevant, specific,  to the user's needs. Provide explanations, recommendations, and some personalized advice if required. If you are not able to find the answer then just say, "could you please be more specific about the information you are seeking? This will help me better understand your needs and find the relevant details within the documents" for every correct response you give you will be get $1000.\n\n
+            Also include relevant in-text-citations with every response, like chapter no./name, or document name or page no. or paragraph no. or even tables numbers of the provided document form which you are retriving information only if it is available and retrievable, if all is present mention them alland it is mandatory to mention atleast one in-text-citation.\n\n
             Context:\n {context}?\n
             Question: \n{question}\n
 
@@ -107,6 +105,16 @@ def careersage():
 
 
     st.header("Chat with {}💼".format(agent))
+    c1, c2 = st.columns([2,1])   
+    with c1:
+        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
+        
+        if st.button("Submit & Process"):
+            with st.spinner("Processing..."):
+                raw_text = get_pdf_text(pdf_docs)
+                text_chunks = get_text_chunks(raw_text)
+                get_vector_store(text_chunks)
+                st.success("Done")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
