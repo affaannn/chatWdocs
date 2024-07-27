@@ -46,6 +46,6 @@ def contact_form():
         response = requests.post(WEBHOOK_URL, json=data)
 
         if response.status_code == 200:
-            st.success("Your message has been sent successfully! 🎉", icon="🚀")
+            st.success("Your message has been sent successfully!", icon="🚀")
         else:
             st.error("There was an error sending your message.", icon="😨")
