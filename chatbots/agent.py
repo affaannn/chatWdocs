@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 import base64
 import warnings
 import time
+import json
+import requests  # pip install requests
+from streamlit_lottie import st_lottie  # pip install streamlit-lottie
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 load_dotenv()
@@ -31,7 +34,10 @@ def agent():
 
 
     def get_text_chunks(text):
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200,
+                                                       separators=["\n\n", "\n", ".", " "],
+                                                       keep_separator=False,)
+        
         chunks = text_splitter.split_text(text)
         return chunks
 
@@ -42,7 +48,7 @@ def agent():
         vector_store.save_local("faiss_index")
         #vector_store.save_local("vectorstore.json")
 
-
+   # @st.cache_data
     def get_conversational_chain(prompt_template):
 
         model = ChatGoogleGenerativeAI(model="gemini-pro",
@@ -54,7 +60,7 @@ def agent():
         return chain
 
 
-
+    #@st.cache_data
     def user_input(user_question, prompt_template):
         embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
         
@@ -80,23 +86,25 @@ def agent():
                 time.sleep(0.05)
             yield "\n"
 
-
+    def load_lottieurl(url: str):
+        r = requests.get(url)
+        if r.status_code != 200:
+            return None
+        return r.json()
     #def main():
-    with st.sidebar:
+    #with st.sidebar:
+            
+       
         
-        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
-        if st.button("Submit & Process"):
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                text_chunks = get_text_chunks(raw_text)
-                get_vector_store(text_chunks)
-                st.success("Done")
 
 
     prompt_template = """
             You are a document retrieval expert hired to assist with extracting and summarizing information from various types of documents, including research papers, financial reports, resumes, legal documents, business plans, and more. This includes identifying key points, summarizing findings, extracting relevant data, and providing explanations and insights based on the content. You have access to a comprehensive database of diverse documents and can retrieve and analyze relevant information to provide accurate and detailed responses.
-            Instructions: You will be asked questions by a wide range of users, including students, researchers, academics, professionals, executives, investors, regulatory authorities, recruiters, and other stakeholders. Using the provided context and your financial knowledge, your task is to understand the query like an intelligent agent think step by step and generate a detailed and accurate response to the user's query by extracting and interpreting information from diverse documents. This may include summarizing sections of a document, extracting specific data or findings, and explaining complex concepts. Ensure that the information is up-to-date and relevant to the user's needs. Provide clear explanations, and if you are not able to find the answer, 
-            then just say, "Could you please be more specific about the information you are seeking? This will help me better understand your needs and find the relevant details within the documents." For every correct response you give, you will receive $1000. Also if the contents that the given document is realted to financial, then you suggest people to use the "FinSage agent", if it is related to skill , jobs , internship then you suggest the user to use "CareerSage agent", and if it realted to some academics book or knowledge, research paper, article then you suggest them to use "ScholarSage agent" in the end of your response.  \n\n
+            Instructions: You will be asked questions by a wide range of users, including students, researchers, academics, professionals, executives, investors, regulatory authorities, recruiters, and other stakeholders. Using the provided context and your financial knowledge, your task is to understand the query like an intelligent agent, think step by step, and generate a detailed and accurate response to the user's query by extracting and interpreting information from diverse documents. This may include summarizing sections of a document, extracting specific data or findings, and explaining complex concepts.
+            Ensure that the information is up-to-date and relevant to the user's needs. If you are not able to find the answer, then just say, "Could you please be more specific about the information you are seeking? This will help me better understand your needs and find the relevant details within the documents." 
+            Also, if the content is related to financial documents, suggest users use the "FinSage agent" if it is related to skill , jobs , internship then you suggest the user to use "CareerSage agent", and if it realted to some academics book or knowledge, research paper, article then you suggest them to use "ScholarSage agent" in the end of your response. 
+            Also include relevant in-text-citations with every response, like chapter no./name, or document name or page no. or paragraph no. or even tables numbers of the provided document form which you are retriving information only if it is available and retrievable, if all is present mention them alland it is mandatory to mention atleast one in-text-citation.\n\n
+                              
             Context:\n {context}?\n
             Question: \n{question}\n
 
@@ -107,6 +115,16 @@ def agent():
 
 
     st.header("Chat with {}📚".format(agent))
+    c1, c2 = st.columns([2,1])   
+    with c1:
+        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
+        
+        if st.button("Submit & Process"):
+            with st.spinner("Processing..."):
+                raw_text = get_pdf_text(pdf_docs)
+                text_chunks = get_text_chunks(raw_text)
+                get_vector_store(text_chunks)
+                st.success("Done")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
