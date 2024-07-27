@@ -2,45 +2,31 @@ import streamlit as st
 from contact_form import contact_form
 def contact():
 
-    @st.experimental_dialog("Contact Me")
+    
+    #@st.experimental_dialog("Contact Me")
     def show_contact_form():
         contact_form()
 
-
+    st.markdown("<h1 style='text-align: left;'>Contact Us</h1>", unsafe_allow_html=True)
     # --- HERO SECTION ---
-    col1, col2 = st.columns(2, gap="small", vertical_alignment="center")
+    col1, col2 = st.columns(2, gap="medium", vertical_alignment="center")
+    
     with col1:
-        st.image("./assets/images.png", width=230)
+        show_contact_form()
+        #st.image("./assets/images.png", width=230)
 
     with col2:
-        st.title("Sven Bosau", anchor=False)
+        st.markdown("**We're Here to Assist You**")
         st.write(
-            "Senior Data Analyst, assisting enterprises by supporting data-driven decision-making."
-        )
-        if st.button("✉️ Contact Me"):
-            show_contact_form()
-
-
-    # --- EXPERIENCE & QUALIFICATIONS ---
-    st.write("\n")
-    st.subheader("Experience & Qualifications", anchor=False)
-    st.write(
-        """
-        - 7 Years experience extracting actionable insights from data
-        - Strong hands-on experience and knowledge in Python and Excel
-        - Good understanding of statistical principles and their respective applications
-        - Excellent team-player and displaying a strong sense of initiative on tasks
-        """
-    )
-
-    # --- SKILLS ---
-    st.write("\n")
-    st.subheader("Hard Skills", anchor=False)
-    st.write(
-        """
-        - Programming: Python (Scikit-learn, Pandas), SQL, VBA
-        - Data Visualization: PowerBi, MS Excel, Plotly
-        - Modeling: Logistic regression, linear regression, decision trees
-        - Databases: Postgres, MongoDB, MySQL
-        """
-    )
+            "Thank you for your interest in chatWdocs. Whether you have questions, suggestions, or concerns, we are dedicated to providing the support you need."
+            )
+        st.markdown("**Getting Started with chatWdocs:**")
+        st.write("For comprehensive guidance on using chatWdocs, please visit our Tutorials or Blogs.")
+        st.markdown("**Business Inquiries:**")
+        st.write("If you are reaching out about chatWdocs for Business, kindly include a brief overview of your business requirements to help us serve you better")
+        st.markdown("**Mailing Address:**")
+        st.write("""955 Astralis Tower 
+                 Supernova sector 94 
+                 Noida Utter pradesh 201307""")
+        #if st.button("✉️ Contact Me"):
+            
