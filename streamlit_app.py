@@ -3,9 +3,13 @@ import streamlit as st
 from streamlit_navigation_bar import st_navbar
 
 import pages as pg
+from streamlit_extras.app_logo import add_logo
+
+def logo():
+    add_logo("assets/logo2.png", height=300)
  
 
-st.set_page_config(initial_sidebar_state="collapsed")
+st.set_page_config(initial_sidebar_state="collapsed", layout="wide")
 
 styles = {
     "nav": {
@@ -37,7 +41,8 @@ options = {
 bars = ["Home", "Pricing", "Contact", "Chatbots"]
 page = st_navbar(bars, styles = styles, options = options)
 # --- SHARED ON ALL PAGES ---
-st.logo("assets/logo2.png")
+st.logo("assets/logo2.png", link=None, icon_image=None)
+logo()
 if page == "Home":
     pg.home()
 elif page == "Pricing":
