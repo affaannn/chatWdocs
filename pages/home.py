@@ -10,6 +10,17 @@ from streamlit_lottie import st_lottie  # pip install streamlit-lottie
 
 
 def home():
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+        body, h1, h2, h3, h4, h5, h6, p, div, span, a, input, button {
+            font-family: 'Sora', sans-serif;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
     def load_lottiefile(filepath: str):
         with open(filepath, "r") as f:
             return json.load(f)
@@ -38,7 +49,7 @@ def home():
     a1, a2, a3 = st.columns([1,5,1], vertical_alignment="center")
     with a2:
         #st.title("Your AI for your Documents")
-        st.markdown("<h1 style='text-align: center;'>Your AI for your Documents</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; color: rgb(41, 86, 160);'>Your AI for your Documents</h1>", unsafe_allow_html=True)
     with a2:
         st.markdown("<h4 style='text-align: center;'>From text to clarity in seconds, AI summaries and answers at your command. Transform your documents effortlessly.</h4>", unsafe_allow_html=True)
     with a2:
