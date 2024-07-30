@@ -6,6 +6,17 @@ from chatbots.scholarsage import scholarsage
 from streamlit_option_menu import option_menu
 
 def chatbot():
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+        body, h1, h2, h3, h4, h5, h6, p, div, span, a, input, button {
+            font-family: 'Sora', sans-serif;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
     
     styles = {
         "container": {"background-color": "rgb(41, 86, 160)", "border-radius": "10px"},
