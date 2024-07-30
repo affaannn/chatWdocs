@@ -21,7 +21,7 @@ def home():
             return None
         return r.json()
     c1, c2, c3 = st.columns([1,1,1], vertical_alignment="center")
-    lottie_hello = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_M9p23l.json")
+    lottie_hello = load_lottieurl("https://lottie.host/7d5f2133-63a5-401f-a044-ca7812da4234/0VrVVBIoBZ.json")
     with c2:
         st_lottie(
             lottie_hello,
