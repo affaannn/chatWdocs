@@ -110,11 +110,7 @@ def agent():
 
             Answer:
             """
-    agent = "PDF"
-
-
-
-    st.header("Chat with {}📚".format(agent))
+    st.markdown("<h2 style='text-align: left; color: rgb(41, 86, 160);'>Chat with PDF</h2>", unsafe_allow_html=True)
     c1, c2 = st.columns([2,1])   
     with c1:
         pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
